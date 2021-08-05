@@ -1,13 +1,22 @@
-# TASK
+- [**TASK**](#task)
+  - [**Crawling**](#crawling)
+    - [**1. google**](#1-google)
+    - [**2. naver**](#2-naver)
+      - [**Open API**](#open-api)
+  - [**Doc Gen**](#doc-gen)
+    - [**1. markovify**](#1-markovify)
+- [문의 사항](#문의-사항)
 
-## __Crawling__
+# **TASK**
 
-### 1. google
+## **Crawling**
+
+### **1. google**
 
 </br>
 
-### 2. naver
-#### Open API
+### **2. naver**
+#### **Open API**
 1. 블로그 검색
    - https://developers.naver.com/docs/serviceapi/search/blog/blog.md
    - sample
@@ -33,7 +42,23 @@
     else:
         print("Error Code:" + rescode)
    ```
+2. 게시물 title url 수집.
+
+3. beautiful soup 으로 `se-text-paragraph` 찾아 article DB 저장
+
+4. DB 구조
+
+ |  index  | title | article |   keyword   |
+ | :-----: | :---: | :-----: | :---------: |
+ | INT(11) | TEXT  |  TEXT   | VARCHAR(50) |
 
 ## **Doc Gen**
+### **1. markovify**
+1. 현재 상태에서 POSTagger(Mecab 등) 사용하도록 변경
+    - [github/markovify](https://github.com/jsvine/markovify#extending-markovifytext)
 
-### 1. markovify
+
+
+# 문의 사항
+1. db 뭐쓰는지
+2. 
