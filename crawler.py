@@ -12,8 +12,8 @@ def getNaverSearch(keyword, numofarticle): # return 타입 : string / 네이버�
         resultMax = numofarticle
         url = f"https://openapi.naver.com/v1/search/blog.json?query={encText}&display={resultMax}&start=101" # json 결과
         request = urllib.request.Request(url)
-        request.add_header("X-Naver-Client-Id",client_id)
-        request.add_header("X-Naver-Client-Secret",client_secret)
+        request.add_header("X-Naver-Client-Id",Config.NAVER_CLIENT_ID)
+        request.add_header("X-Naver-Client-Secret",Config.NAVER_CLIENT_SECRET_ID)
         response = urllib.request.urlopen(request)
         rescode = response.getcode()
         if(rescode == 200):
