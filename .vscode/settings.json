@@ -8,5 +8,5 @@
         }
     ],
     "sqltools.useNodeRuntime": true,
-    "python.pythonPath": "C:\\Users\\DELL\\DEV\\Anaconda3\\envs\\docgen\\python.exe"
+    "python.pythonPath": "C:\\Users\\DELL\\DEV\\Anaconda3\\envs\\nlp\\python.exe"
 }
