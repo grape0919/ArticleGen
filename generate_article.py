@@ -1,3 +1,4 @@
+
 from typing import List
 from nlp.posText import POSifiedText
 from crawler.data.article_info import Article
@@ -13,6 +14,7 @@ class generator:
     def makeMarkov(mode = "file", srcPath = "textSource.txt", stLength = 15): # return 타입 : string / 섞은 후 컨텐츠
         text = ""
         print("src :", srcPath)
+
         if(mode == "file"):
             with open(srcPath, encoding="utf-8") as f:
                 text = f.read()

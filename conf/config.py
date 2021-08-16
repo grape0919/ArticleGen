@@ -57,12 +57,12 @@ class Config():
                 })}
             print('new config : ', self.config_dump)
             yaml.dump(self.config_dump, f)
+
             f.close()
 
     def init_conf(self):
         print("Config initalize")
         self.save()
-
 
 if __name__ == '__main__':
     conf = Config()
@@ -73,3 +73,4 @@ if __name__ == '__main__':
     print(conf.config_dump[conf.Key.NAVER.name][conf.Key.CLIENT_SECRET_ID.name])
     print(conf.NAVER_CLIENT_SECRET_ID)
     print(conf.Key.CLIENT_SECRET_ID.name)
+
