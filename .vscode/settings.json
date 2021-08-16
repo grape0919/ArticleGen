@@ -1,0 +1,12 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "SINGLE",
+            "database": "c:/Users/DELL/PLAYGROUND/hkdevstudio/DocGen/rdbms/example.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
+    "python.pythonPath": "C:\\Users\\DELL\\DEV\\Anaconda3\\envs\\nlp\\python.exe"
+}
