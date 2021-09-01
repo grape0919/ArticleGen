@@ -12,6 +12,7 @@ class Config():
     GOOGLE_CLIENT_SECRET_ID:str = ''
 
     DB_HOST:str = ''
+    DB_PORT:str = ''
     DB_USER:str = '' 
     DB_PASSWORD:str = ''
     DB_DATABASE:str = ''
@@ -25,9 +26,10 @@ class Config():
         DB = 0x13
         TYPE = 0x23
         HOST = 0x24
-        USER = 0x25
-        PASSWORD = 0x26
-        DATABASE = 0x27
+        PORT = 0x25
+        USER = 0x26
+        PASSWORD = 0x27
+        DATABASE = 0x28
 
     def load(self):
         print("Config load")
@@ -39,7 +41,10 @@ class Config():
         self.NAVER_CLIENT_SECRET_ID = self.config_dump[self.Key.NAVER.name][self.Key.CLIENT_SECRET_ID.name]
         self.GOOGLE_CLIENT_ID = self.config_dump[self.Key.GOOGLE.name][self.Key.CLIENT_ID.name]
         self.GOOGLE_CLIENT_SECRET_ID = self.config_dump[self.Key.GOOGLE.name][self.Key.CLIENT_SECRET_ID.name]
+        self.DB_TYPE = self.config_dump[self.Key.DB.name][self.Key.TYPE.name]
         self.DB_HOST = self.config_dump[self.Key.DB.name][self.Key.HOST.name]
+        self.DB_PORT = self.config_dump[self.Key.DB.name][self.Key.PORT.name]
+        self.DB_USER = self.config_dump[self.Key.DB.name][self.Key.USER.name]
         self.DB_PASSWORD = self.config_dump[self.Key.DB.name][self.Key.PASSWORD.name]
         self.DB_DATABASE = self.config_dump[self.Key.DB.name][self.Key.DATABASE.name]
     
@@ -57,6 +62,15 @@ class Config():
                     {
                         self.Key.CLIENT_ID.name : self.config_dump[self.Key.GOOGLE.name][self.Key.CLIENT_ID.name],
                         self.Key.CLIENT_SECRET_ID.name : self.config_dump[self.Key.GOOGLE.name][self.Key.CLIENT_SECRET_ID.name]
+                    },
+                    'DB' :
+                    {
+                        self.Key.TYPE.name : self.config_dump[self.Key.DB.name][self.Key.TYPE.name],
+                        self.Key.HOST.name : self.config_dump[self.Key.DB.name][self.Key.HOST.name],
+                        self.Key.PORT.name: self.config_dump[self.Key.DB.name][self.Key.PORT.name],
+                        self.Key.USER.name: self.config_dump[self.Key.DB.name][self.Key.USER.name],
+                        self.Key.PASSWORD.name : self.config_dump[self.Key.DB.name][self.Key.PASSWORD.name],
+                        self.Key.DATABASE.name : self.config_dump[self.Key.DB.name][self.Key.DATABASE.name]
                     }
                 })}
             print('new config : ', self.config_dump)
@@ -77,4 +91,5 @@ if __name__ == '__main__':
     print(conf.config_dump[conf.Key.NAVER.name][conf.Key.CLIENT_SECRET_ID.name])
     print(conf.NAVER_CLIENT_SECRET_ID)
     print(conf.Key.CLIENT_SECRET_ID.name)
+    print(conf.DB_PASSWORD)
 

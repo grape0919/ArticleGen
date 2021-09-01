@@ -7,8 +7,9 @@ GOOGLE:
   CLIENT_SECRET_ID: 
 
 DB:
-  TYPE:
-  HOST: 
-  DATABASE:
-  USER: 
-  PASSWORD: 
+  TYPE: mysql
+  HOST: localhost
+  PORT: 3306
+  DATABASE: gendoc
+  USER: root
+  PASSWORD: '0000'
