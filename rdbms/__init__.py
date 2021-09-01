@@ -7,3 +7,6 @@ __all__ = [
     "query",
     "dbHandler"
 ]
+
+
+db_handler = DBHandler()

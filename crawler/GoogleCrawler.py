@@ -3,7 +3,6 @@ import sys
 sys.path.append(os.path.dirname(__file__))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-
 from crawler.data.crawl_info import Url_info
 import re
 # import re
@@ -19,44 +18,39 @@ from ABCCrawler import ABCCrawler
 from bs4 import BeautifulSoup
 
 from data.article_info import *
-class NaverCrawler(ABCCrawler):
 
-    def __init__(self):
-        super().__init__()
+class GoogleCrawler(ABCCrawler):
 
     def _ENGINE_TYPE(self) -> engine_type:
-        return engine_type.NAVER
+        return engine_type.GOOGLE
 
     def _api_url(self) -> str:
-        return f"https://openapi.naver.com/v1/search/blog.json"
+        return ""
 
-    def _api_input_params(self) -> dict:
+    def _api_input_params(self):
         return {
-            "query" : None,
-            "display" : 100,
-            "start" : 1
+            "param1": "",
+            "param2": "",
+            "param3" : ""
         }
 
-    def _crawling_urls(self, keyword:str, num_of_target:int) -> ABCCrawler.URL_LIST:
+    def _crawling_urls(self, keyword: str, num_of_article: int) -> ABCCrawler.URL_LIST:
 
         encText = urllib.parse.quote(keyword)
         url_list = []
 
         try:
-
             cnt = 0
-            for i in range(int(num_of_target/100)+1, 0, -1):
-
-
+            for i in range(int(num_of_article/100)+1, 0, -1):
                 resultMax = 100
                 if i == 1 :
-                    resultMax = num_of_target%100
+                    resultMax = num_of_article%100
 
-                self.set_param("query", encText)
-                self.set_param("display", resultMax)
-                self.set_param("start", i)
+                url = self.api_url+f"?query={encText}&display={resultMax}&start={i}" # json 결과
+                request = urllib.request.Request(url)
+                self._req_header(request)
 
-                response = self._request()
+                response = urllib.request.urlopen(request)
                 rescode = response.getcode()
                 if(rescode == 200):
                     response_body = response.read()
