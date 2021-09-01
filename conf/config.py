@@ -14,6 +14,7 @@ class Config():
     DB_HOST:str = ''
     DB_USER:str = '' 
     DB_PASSWORD:str = ''
+    DB_DATABASE:str = ''
 
     class Key(Enum):
         NAVER = 0x11
@@ -26,6 +27,7 @@ class Config():
         HOST = 0x24
         USER = 0x25
         PASSWORD = 0x26
+        DATABASE = 0x27
 
     def load(self):
         print("Config load")
@@ -38,6 +40,8 @@ class Config():
         self.GOOGLE_CLIENT_ID = self.config_dump[self.Key.GOOGLE.name][self.Key.CLIENT_ID.name]
         self.GOOGLE_CLIENT_SECRET_ID = self.config_dump[self.Key.GOOGLE.name][self.Key.CLIENT_SECRET_ID.name]
         self.DB_HOST = self.config_dump[self.Key.DB.name][self.Key.HOST.name]
+        self.DB_PASSWORD = self.config_dump[self.Key.DB.name][self.Key.PASSWORD.name]
+        self.DB_DATABASE = self.config_dump[self.Key.DB.name][self.Key.DATABASE.name]
     
     def save(self):
         print("Config save")

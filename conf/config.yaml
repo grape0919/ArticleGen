@@ -9,5 +9,6 @@ GOOGLE:
 DB:
   TYPE:
   HOST: 
+  DATABASE:
   USER: 
   PASSWORD: 
