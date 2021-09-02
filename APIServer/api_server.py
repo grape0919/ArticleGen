@@ -1,7 +1,7 @@
+from crawler import get_crawler
 from crawler.GoogleCrawler import GoogleCrawler
 from crawler.data import engine_type
 from crawler.NaverCrawler import NaverCrawler
-from sys import argv
 from flask import Flask  # 서버 구현을 위한 Flask 객체 import
 from flask_restful import Api, Resource, reqparse  # Api 구현을 위한 Api 객체 import
 
@@ -19,6 +19,10 @@ class Article(Resource):
         args = req_parser.parse_args()
         print("!@#!@# args : ", args)
 
+        engine = args['engine']
+        engine = engine.lower()
+        
+
         return {"status": "success"}
 
 class Renew(Resource):
@@ -26,21 +30,14 @@ class Renew(Resource):
     def get(self):
         try:
             args = req_parser.parse_args()
-            print("!@#!@# args : ", args)
 
-            engine:str = args['engine']
-            engine = engine.upper()
+            engine = args['engine']
+            engine = engine[0].upper() + engine[1:].lower()
 
-            
-
-            if engine == engine_type.NAVER.name or engine == str(engine_type.NAVER.value):
-                crawler = NaverCrawler()
-            elif engine == engine_type.GOOGLE.name or engine == str(engine_type.GOOGLE.value):
-                
-                crawler = GoogleCrawler()
+            crawler = get_crawler(engine)
 
 
-            article_list = crawler.proc(args['keyword'], args['num_of_target'])
+            article_list = crawler.proc(args['keyword'], int(args['num_of_target']))
             if article_list :
                 print("!@#!@# complete craw")
 

@@ -43,11 +43,8 @@ class NaverCrawler(ABCCrawler):
         url_list = []
 
         try:
-
             cnt = 0
             for i in range(int(num_of_target/100)+1, 0, -1):
-
-
                 resultMax = 100
                 if i == 1 :
                     resultMax = num_of_target%100
@@ -78,7 +75,7 @@ class NaverCrawler(ABCCrawler):
             
             print("[INFO] success craw url : ", cnt)
         except Exception as e:
-            print("[ERROR] ", e)
+            print("[ERROR] NaverCrawler._crawling_urls : ", e)
             return None
 
         return url_list
