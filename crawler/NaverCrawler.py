@@ -44,7 +44,9 @@ class NaverCrawler(ABCCrawler):
             resultMax = 100
             if i == 1 :
                 resultMax = num_of_target%100
-                resultMax = 100 if resultMax == 0 else resultMax
+
+            if resultMax == 0:
+                break
 
             self.set_param("query", encText)
             self.set_param("display", resultMax)
@@ -95,7 +97,8 @@ class NaverCrawler(ABCCrawler):
 
             article = re.sub('[\\s]+', ' ', str(" ".join(article)))
 
-            return Article(engine_type.NAVER, None, frame_link, url.title, article, len(article), url.postdate)
+            return Article(engine_type.NAVER, ID=None, URL=frame_link, TITLE=url.title,
+                        ARTICLE=article, LENGTH=len(article), POSTDATE=url.postdate)
 
         else:
             print("Not Found Frame :", url)
@@ -151,7 +154,7 @@ class NaverCrawler(ABCCrawler):
 
                             article = re.sub('[\\s]+', ' ', str(" ".join(article)))
 
-                            article_list.append(Article(engine_type.NAVER, None, frame_link, title, article, len(article), postdate))
+                            article_list.append(Article(engine_type.NAVER, None, frame_link, None, title, article, len(article), postdate))
 
                             time.sleep(0.1)
                         else:

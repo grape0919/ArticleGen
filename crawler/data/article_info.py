@@ -1,3 +1,4 @@
+from typing import Tuple
 from crawler.data import engine_type
 
 
@@ -19,13 +20,15 @@ class Article():
         self.ID = ID
         self.URL = URL
         self.KEYWORD_ID = KEYWORD_ID
-        self.TITLE = TITLE
-        self.ARTICLE = ARTICLE
+        self.TITLE = TITLE.replace("'","\'")
+        self.ARTICLE = ARTICLE.replace("'","\'")
         self.LENGTH = LENGTH
         self.POSTDATE = POSTDATE
         self.CREATED_DATE = CREATED_DATE
         self.ENGINE = ENGINE
 
+    def to_tuple(self) -> Tuple[str, int, str, str, int, str]:#URL, KEYWORD_ID, TITLE, CONTENT, LENGTH, CREATED_DATE
+        return (self.URL, self.KEYWORD_ID, self.TITLE, self.ARTICLE, self.LENGTH, self.POSTDATE)
 class Keyword():
 
     ID:int = -1

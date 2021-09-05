@@ -12,13 +12,13 @@ api = Api(app)  # Flask 객체에 Api 객체 등록
 req_parser = reqparse.RequestParser()
 req_parser.add_argument('keyword', type=str)
 req_parser.add_argument('num_of_target', type=str)
+req_parser.add_argument('mode', type=str)
 req_parser.add_argument('engine', type=str)
 req_parser.add_argument('power', type=int)
-class Article(Resource):
+class Generate_Article(Resource):
     def get(self):  # GET 요청시 리턴 값에 해당 하는 dict를 JSON 형태로 반환
 
         args = req_parser.parse_args()
-        print("!@#!@# args : ", args)
 
         engine = args['engine']
         engine = engine.lower()
@@ -41,11 +41,10 @@ class Renew(Resource):
 
         if not keyword or not num_of_target:
             return {"error":"wrong input"}
-        article_list = crawler.proc(keyword = keyword, num_of_target = int(num_of_target))
-        if article_list :
-            print("!@#!@# complete craw")
 
-            pass # db insert
+        article_list = crawler.proc(keyword = keyword, num_of_target = int(num_of_target))
+        if article_list:
+            db_handler.multiple_insert_article(engine_type(engine.upper()), keyword ,article_list)
 
         return {"status":"success"}
 
@@ -62,7 +61,6 @@ class Renew_status(Resource):
         return {"renew_status" : "running", "process" : "70% "}
 
 class Count_article(Resource):
-
     def get(self):
         try:
             args = req_parser.parse_args()
@@ -76,7 +74,7 @@ class Count_article(Resource):
             return {'error':str(e)}
         
         
-api.add_resource(Article, '/article')
+api.add_resource(Generate_Article, '/article')
 api.add_resource(Count_article, '/article/count')
 api.add_resource(Renew, '/dataset/renew')
 api.add_resource(Renew_status, '/dataset/status')

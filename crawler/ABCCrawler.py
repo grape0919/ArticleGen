@@ -113,7 +113,7 @@ class ABCCrawler(metaclass=ABCMeta):
         ...
 
     @classmethod
-    def proc(self, keyword:str, num_of_target:int):
+    def proc(self, keyword:str, num_of_target:int) -> List[Article]:
         
         url_list = self._crawling_urls(self, keyword=keyword, num_of_target=num_of_target)
         articles = []
