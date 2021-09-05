@@ -33,11 +33,14 @@ class Renew(Resource):
 
         engine = args['engine']
         engine = engine[0].upper() + engine[1:].lower()
+        keyword = args['keyword']
+        num_of_target = args['num_of_target']
+
+        if args['mode'] and args['mode'] == 'clear':
+            db_handler.delete_article(keyword = keyword)
     
         crawler = get_crawler(engine)
 
-        keyword = args['keyword']
-        num_of_target = args['num_of_target']
 
         if not keyword or not num_of_target:
             return {"error":"wrong input"}

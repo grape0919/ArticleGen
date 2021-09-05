@@ -18,7 +18,8 @@ class DBHandler():
             host=conf.DB_HOST,
             port=conf.DB_PORT,
             db=conf.DB_DATABASE,
-            charset="utf8"
+            charset="utf8",
+            use_unicode=True
         )
 
     @property
@@ -96,13 +97,17 @@ class DBHandler():
         else:
             return None
 
+    def delete_article(self, keyword:str):
+        self.db_cursor.execute(query.DELETE_NAVER_ARTICLES, (keyword))
+        self.commit()
+
 if __name__ == "__main__":
     handler = DBHandler()
     handler.init_db()
     handler.insert_keywords("선풍기")
-    handler.multiple_insert_article(engine_type.NAVER, 
-                            [("url1", 1, "선풍기 제목 1 ", "선풍기 글 1 ", 10),
-                            ("url2", 1, "선풍기 제목 2 ", "선풍기 글 2 ", 10),
-                            ("url3", 1, "선풍기 제목 3 ", "선풍기 글 3 ", 10),
-                            ("url4", 1, "선풍기 제목 4 ", "선풍기 글 4 ", 10),
-                            ("url5", 1, "선풍기 제목 5 ", "선풍기 글 5 ", 10)])
+    # handler.multiple_insert_article(engine_type.NAVER, 
+    #                         [("url1", 1, "선풍기 제목 1 ", "선풍기 글 1 ", 10),
+    #                         ("url2", 1, "선풍기 제목 2 ", "선풍기 글 2 ", 10),
+    #                         ("url3", 1, "선풍기 제목 3 ", "선풍기 글 3 ", 10),
+    #                         ("url4", 1, "선풍기 제목 4 ", "선풍기 글 4 ", 10),
+    #                         ("url5", 1, "선풍기 제목 5 ", "선풍기 글 5 ", 10)])
