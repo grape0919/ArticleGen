@@ -1,6 +1,6 @@
 from crawler.data import engine_type
 from datetime import datetime
-from typing import List
+from typing import List, Tuple
 from rdbms import query
 from conf import conf
 import pymysql
@@ -58,7 +58,7 @@ class DBHandler():
         else:
             print("!@#!@# 다른 엔진은 준비되지 않았습니다.")
         
-    def multiple_insert_article(self,engine:engine_type, inputs:List[tuple[str, int, str, str, int]]):
+    def multiple_insert_article(self,engine:engine_type, inputs:List[Tuple[str, int, str, str, int]]):
         if engine == engine_type.NAVER:
             now = datetime.now()
             now.strftime('%Y-%m-%d %H:%M:%S')
