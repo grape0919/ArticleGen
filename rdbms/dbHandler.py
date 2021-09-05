@@ -28,8 +28,8 @@ class DBHandler():
         self.db_cursor.execute(sql)
         return self.db_cursor.fetchall()
     
-    def insert(self, sql):
-        self.db_cursor.execute(sql)
+    def insert(self, sql, *args):
+        self.db_cursor.execute(sql, (args))
         self.commit()
 
     def commit(self):
@@ -75,14 +75,21 @@ class DBHandler():
         else:
             print("!@#!@# 다른 엔진은 준비되지 않았습니다.")
 
+    def count_article(self, engine:engine_type, keyword:str) -> int:
+        if engine == engine_type.NAVER:
+            count = self.select(query.COUNT_NAVER_ARTICLE, (keyword))
+            return count
+        else:
+            print("!@#!@# 다른 엔진은 준비되지 않았습니다.")
+            return 0
 
 if __name__ == "__main__":
     handler = DBHandler()
     handler.init_db()
-    handler.insert_keywords("선풍기")
-    handler.multiple_insert_article(engine_type.NAVER, 
-                            [("url1", 1, "선풍기 제목 1 ", "선풍기 글 1 ", 10),
-                            ("url2", 1, "선풍기 제목 2 ", "선풍기 글 2 ", 10),
-                            ("url3", 1, "선풍기 제목 3 ", "선풍기 글 3 ", 10),
-                            ("url4", 1, "선풍기 제목 4 ", "선풍기 글 4 ", 10),
-                            ("url5", 1, "선풍기 제목 5 ", "선풍기 글 5 ", 10)])
+    # handler.insert_keywords("선풍기")
+    # handler.multiple_insert_article(engine_type.NAVER, 
+    #                         [("url1", 1, "선풍기 제목 1 ", "선풍기 글 1 ", 10),
+    #                         ("url2", 1, "선풍기 제목 2 ", "선풍기 글 2 ", 10),
+    #                         ("url3", 1, "선풍기 제목 3 ", "선풍기 글 3 ", 10),
+    #                         ("url4", 1, "선풍기 제목 4 ", "선풍기 글 4 ", 10),
+    #                         ("url5", 1, "선풍기 제목 5 ", "선풍기 글 5 ", 10)])

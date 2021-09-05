@@ -1,9 +1,5 @@
-import os
-import sys
-sys.path.append(os.path.dirname(__file__))
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-
+from typing import List
 from crawler.data.crawl_info import Url_info
 import re
 # import re
@@ -37,46 +33,47 @@ class NaverCrawler(ABCCrawler):
             "start" : 1
         }
 
-    def _crawling_urls(self, keyword:str, num_of_target:int) -> ABCCrawler.URL_LIST:
+    def _crawling_urls(self, keyword:str, num_of_target:int) -> List[Url_info]:
 
         encText = urllib.parse.quote(keyword)
         url_list = []
 
-        try:
-            cnt = 0
-            for i in range(int(num_of_target/100)+1, 0, -1):
-                resultMax = 100
-                if i == 1 :
-                    resultMax = num_of_target%100
+        # try:
+        cnt = 0
+        for i in range(int(num_of_target/100)+1, 0, -1):
+            resultMax = 100
+            if i == 1 :
+                resultMax = num_of_target%100
+                resultMax = 100 if resultMax == 0 else resultMax
 
-                self.set_param("query", encText)
-                self.set_param("display", resultMax)
-                self.set_param("start", i)
+            self.set_param("query", encText)
+            self.set_param("display", resultMax)
+            self.set_param("start", i)
 
-                response = self._request()
-                rescode = response.getcode()
-                if(rescode == 200):
-                    response_body = response.read()
-                    result = json.loads(response_body)
-                    items = result['items']
-                    for item in items:
-                        link = item["link"]
-                        title = item["title"]
-                        postdate = item["postdate"]
+            response = self._request(self)
+            rescode = response.getcode()
+            if(rescode == 200):
+                response_body = response.read()
+                result = json.loads(response_body)
+                items = result['items']
+                for item in items:
+                    link = item["link"]
+                    title = item["title"]
+                    postdate = item["postdate"]
 
-                        url_list.append(Url_info(link, title, postdate))
+                    url_list.append(Url_info(link, title, postdate))
 
-                        cnt += 1
+                    cnt += 1
 
-                    time.sleep(0.1)
-                else:
-                    print("Error Code:", rescode)
-                    return None
-            
-            print("[INFO] success craw url : ", cnt)
-        except Exception as e:
-            print("[ERROR] NaverCrawler._crawling_urls : ", e)
-            return None
+                time.sleep(0.1)
+            else:
+                print("Error Code:", rescode)
+                return None
+        
+        print("[INFO] success craw url : ", cnt)
+        # except Exception as e:
+        #     print("[ERROR] NaverCrawler._crawling_urls : ", e)
+        #     return None
 
         return url_list
 

@@ -8,7 +8,9 @@ from GoogleCrawler import GoogleCrawler
 
 def get_crawler(engine_prefix:str = "Naver") -> ABCCrawler:
 
-    crawler_class = getattr(sys.modules['crawler'], engine_prefix+'Crawler')
+    crawler_name = engine_prefix+'Crawler'
+
+    crawler_class = getattr(sys.modules[__name__], crawler_name)
     print("!@#!@# crawler_class : ", crawler_class)
     obj = crawler_class()
     print("!@#!@# obj : ", obj)

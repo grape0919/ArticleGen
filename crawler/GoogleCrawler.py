@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import List
 sys.path.append(os.path.dirname(__file__))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
@@ -34,7 +35,7 @@ class GoogleCrawler(ABCCrawler):
             "param3" : ""
         }
 
-    def _crawling_urls(self, keyword: str, num_of_article: int) -> ABCCrawler.URL_LIST:
+    def _crawling_urls(self, keyword: str, num_of_article: int) -> List[Url_info]:
 
         encText = urllib.parse.quote(keyword)
         url_list = []

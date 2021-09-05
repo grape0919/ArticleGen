@@ -4,6 +4,6 @@ __all__=[
 
 from enum import Enum
 class engine_type(Enum):
-    NAVER = 1
-    GOOGLE = 2
+    NAVER = "NAVER"
+    GOOGLE = "GOOGLE"
     NONE = None

@@ -1,6 +1,6 @@
 
 
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import ABCMeta, abstractclassmethod, abstractmethod, abstractproperty
 from argparse import ArgumentParser
 from markovify.text import ParamError
 
@@ -21,35 +21,36 @@ class ABCCrawler(metaclass=ABCMeta):
     해당 클래스를 구현하는 것으로 다른 사이트의 article을 수집하여 해당 api에서 사용할 수 있다.
     '''
 
-    URL_LIST = NewType('URL_LIST', List[Url_info])
-    ARTICLE_LIST = NewType('ARTICLE_LIST', List[Article])
-
     __params:dict = {}
 
     def __init__(self):
-        self.__params = self._api_input_params()
+        self.__params = self._api_input_params(self)
 
-    @abstractmethod
+    @abstractclassmethod
     def _api_input_params(self)->dict:
         ...
 
+    @classmethod
     def set_param(self, key, value):
-        if key in self._api_input_params():
+        if key in self._api_input_params(self):
             self.__params.update({key:value})
         else :
             print("[ERROR] 잘못된 파라메터입니다. : ", key)
-            print("[ERROR] 파라메터 리스트 (None은 필수 파라메터입니다.) : ", self._api_input_params())
+            print("[ERROR] 파라메터 리스트 (None은 필수 파라메터입니다.) : ", self._api_input_params(self))
+
+        print("!@#!@# set param : ", key, " : ", value)
+        print("!@#!@# param : ", self.__params)
 
     def __check_validate(self):
+        print("!@#!@# 요청 파라메터 : ", self.__params)
         for k, v in self.__params.items():
-            if k not in self._api_input_params()\
-                or not v:
+            if not v :
                 return False
         
         return True
             
 
-    @abstractmethod
+    @abstractclassmethod
     def _api_url(self)->str:
         ...
 
@@ -57,7 +58,7 @@ class ABCCrawler(metaclass=ABCMeta):
     def api_url(self)->str:
         return self._api_url()
 
-    @abstractmethod
+    @abstractclassmethod
     def _ENGINE_TYPE(self) -> engine_type:
         ...
     
@@ -68,8 +69,8 @@ class ABCCrawler(metaclass=ABCMeta):
     def __init__(self):
         pass
 
-    @abstractmethod
-    def _crawling_urls(self, keyword:str, num_of_target:int) -> URL_LIST:
+    @abstractclassmethod
+    def _crawling_urls(self, keyword:str, num_of_target:int) -> List[Url_info]:
         '''
         crawling article
         @param dynamic param each son classes
@@ -83,23 +84,25 @@ class ABCCrawler(metaclass=ABCMeta):
 
     def _request(self):
 
-        if self.__check_validate():
+        if self.__check_validate(self):
 
-            url = self.api_url
+            url = str(self._api_url(self))
             url += "?"
             for k, v in self.__params.items():
                 url += "&" + str(k) + "=" + str(v)
 
+            print("!@#!@# request : ", url)
             request = urllib.request.Request(url)
-            self._req_header(request)
+            self._req_header(self, request)
             response = urllib.request.urlopen(request)
 
-            self.__params = self._api_input_params()
+            self.__params = self._api_input_params(self)
             return response
 
         else:
             print("[ERROR] 요청 파라매터가 적절하지 않습니다. ")
 
+    @abstractclassmethod
     @abstractmethod
     def _parse_article(self, url:str) -> Article:
         '''
@@ -109,13 +112,14 @@ class ABCCrawler(metaclass=ABCMeta):
         '''
         ...
 
+    @classmethod
     def proc(self, keyword:str, num_of_target:int):
         
-        url_list = self._crawling_urls(keyword, num_of_target)
+        url_list = self._crawling_urls(self, keyword=keyword, num_of_target=num_of_target)
         articles = []
         for url in url_list:
             if url:
-                article = self._parse_article(url)
+                article = self._parse_article(self, url)
         
                 if article :
                     articles.append(article)
