@@ -74,7 +74,7 @@ class DBHandler():
                 article.CREATED_DATE = now
                 temp_inputs.append(article.to_tuple())
 
-            print("!@#!@# debug : ", temp_inputs)
+            # print("!@#!@# debug : ", temp_inputs)
             self.db_cursor.executemany(query.INSERT_ARTICLE, temp_inputs)
             self.commit()
         else:

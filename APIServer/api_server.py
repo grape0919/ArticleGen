@@ -41,7 +41,6 @@ class Renew(Resource):
     
         crawler = get_crawler(engine)
 
-
         if not keyword or not num_of_target:
             return {"error":"wrong input"}
 
