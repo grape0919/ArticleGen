@@ -50,8 +50,9 @@ class DBHandler():
         return sqls.split(";")
 
     def insert_keywords(self, keyword):
-        self.db_cursor.execute(query.INSERT_KEYWORD, keyword)
+        kid = self.db_cursor.execute(query.INSERT_KEYWORD, keyword)
         self.commit()
+        return kid
 
     def insert_article(self, engine:engine_type, url:str, keyword_id:int, title:str, content:str, length:int):
         if engine == engine_type.NAVER:
@@ -65,6 +66,14 @@ class DBHandler():
     def multiple_insert_article(self,engine:engine_type,keyword:str, inputs:List[Article]):
 
         kid = self.get_keyword_id(keyword)
+        if not kid:
+            succeed = self.insert_keywords(keyword)
+            if succeed:
+                kid = self.get_keyword_id(keyword)
+            else:
+                print("[ERROR] 키워드 생성 실패")
+                return False
+            
         if engine == engine_type.NAVER:
             now = datetime.now()
             now.strftime('%Y-%m-%d %H:%M:%S')
@@ -80,10 +89,10 @@ class DBHandler():
         else:
             print("!@#!@# 다른 엔진은 준비되지 않았습니다.")
 
-    def count_article(self, engine:engine_type, keyword:str) -> int:
+    def count_naver_article(self, engine:engine_type) -> int:
         print("!@#!@# start count_article")
         if engine == engine_type.NAVER:
-            count = self.select(query.COUNT_NAVER_ARTICLE, (keyword))
+            count = self.select(query.COUNT_NAVER_ARTICLE)
             print("!@#!@# count_article.count : ", count)
             return count
         else:
@@ -100,6 +109,9 @@ class DBHandler():
     def delete_article(self, keyword:str):
         self.db_cursor.execute(query.DELETE_NAVER_ARTICLES, (keyword))
         self.commit()
+
+    def get_naver_articles(self, keyword, num_of_arts):
+        return self.select(query.SELECT_NAVER_ARTICLES, *(keyword, num_of_arts)) 
 
 if __name__ == "__main__":
     handler = DBHandler()

@@ -18,7 +18,9 @@ INSERT INTO KEYWORDS(KEYWORD) VALUES (%s);
 
 COUNT_NAVER_ARTICLE = \
 """
-SELECT COUNT(0) FROM NAVER_ARTICLES WHERE KEYWORD_ID=(SELECT KEYWORD_ID FROM KEYWORDS WHERE KEYWORD=%s);
+select B.KEYWORD kid, COUNT(0) count FROM NAVER_ARTICLES A
+LEFT JOIN KEYWORDS B ON B.ID = A.KEYWORD_ID
+group by kid;
 """
 
 SELECT_KEYWORD_ID =\
@@ -30,3 +32,8 @@ DELETE_NAVER_ARTICLES =\
 """
 DELETE FROM NAVER_ARTICLES WHERE KEYWORD_ID=(SELECT KEYWORD_ID FROM KEYWORDS WHERE KEYWORD=%s);
 """
+
+SELECT_NAVER_ARTICLES = \
+"""
+SELECT CONTENT FROM NAVER_ARTICLES WHERE KEYWORD_ID=(SELECT KEYWORD_ID FROM KEYWORDS WHERE KEYWORD=%s) ORDER BY rand() LIMIT %s;
+"""                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

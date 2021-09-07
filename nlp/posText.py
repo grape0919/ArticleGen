@@ -5,7 +5,7 @@ from konlpy.tag import Mecab
 
 class POSifiedText(text.Text):
 
-    tagger = Mecab()#dicpath="C:\\mecab\\mecab-ko-dic")
+    tagger = Mecab(dicpath="C:\\mecab\\mecab-ko-dic")
 
     space_tag_list = ("J", "EF", "EC", "ET", "SF", "SE", "NNBC", "SC", "M")
     add_space_tag_list = [ "+"+tag for tag in space_tag_list ]
