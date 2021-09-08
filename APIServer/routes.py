@@ -7,6 +7,7 @@ from crawler.data import engine_type
 from flask_restful import Resource, reqparse  # Api 구현을 위한 Api 객체 import
 from APIServer import api
 
+
 req_parser = reqparse.RequestParser()
 req_parser.add_argument('keyword', type=str)
 req_parser.add_argument('num_of_target', type=str)
@@ -32,8 +33,8 @@ class Generate_Article(Resource):
         engine = engine.lower()
 
         try:
-            display = args['display']
-            display = int(power)
+            display = args['num_of_target']
+            display = int(display)
         except:
             pass
         try:
@@ -47,7 +48,7 @@ class Generate_Article(Resource):
         try:
             keyword = args['keyword']
         except:
-            print("!@#!@# 생성에 사용할 키워드가 없습니다.")
+            print("[ERROR] 생성에 사용할 문서가 없습니다.")
             return {"error" : "wrong keyword."}
             
         if engine == "naver":
