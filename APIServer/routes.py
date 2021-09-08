@@ -1,5 +1,5 @@
 
-from generate_article import generator
+from nlp.generate_article import generator
 from rdbms import db_handler
 import crawler
 from crawler import get_crawler
