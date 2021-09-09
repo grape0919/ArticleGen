@@ -40,9 +40,10 @@ class NaverCrawler(ABCCrawler):
 
         # try:
         cnt = 0
-        for i in range(int(num_of_target/100)+1, 0, -1):
+        round = int(num_of_target/100)
+        for i in range(round+1):
             resultMax = 100
-            if i == 1 :
+            if i == round :
                 resultMax = num_of_target%100
 
             if resultMax == 0:
@@ -50,7 +51,7 @@ class NaverCrawler(ABCCrawler):
 
             self.set_param("query", encText)
             self.set_param("display", resultMax)
-            self.set_param("start", i)
+            self.set_param("start", i+1)
 
             response = self._request(self)
             rescode = response.getcode()
