@@ -11,5 +11,6 @@ __all__ = [
 try:
     db_handler = DBHandler()
 except:
-    print("[ERROR] DB 에 연결을 실패하였습니다.")
-    sys.exit()
+    pass
+    # print("[ERROR] DB 에 연결을 실패하였습니다.")
+    # sys.exit()

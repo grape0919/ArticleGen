@@ -1,4 +1,4 @@
 {
     "python.envFile": "${workspaceFolder}/dev.env",
-    "python.pythonPath": "C:\\Users\\DELL\\DEV\\Anaconda3\\envs\\nlp\\python.exe"
+    "python.pythonPath": "C:\\Users\\DELL\\DEV\\Anaconda3\\envs\\gendoc\\python.exe"
 }

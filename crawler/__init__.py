@@ -4,7 +4,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from crawler.ABCCrawler import ABCCrawler
 from NaverCrawler import NaverCrawler
-from GoogleCrawler import GoogleCrawler
 
 def get_crawler(engine_prefix:str = "Naver") -> ABCCrawler:
 
