@@ -1,12 +1,14 @@
 
+from flask.json import jsonify
 from nlp.generate_article import generator
 from rdbms import db_handler
 from crawler import get_crawler
 from crawler.data import engine_type
 from flask_restful import Resource, reqparse  # Api 구현을 위한 Api 객체 import
 from APIServer import api, celery
+from flask import make_response
 
-task_cache = dict()
+TASK_CACHE = dict()
 
 req_parser = reqparse.RequestParser()
 req_parser.add_argument('keyword', type=str)
@@ -16,7 +18,7 @@ req_parser.add_argument('engine', type=str)
 req_parser.add_argument('power', type=int)
 
 req_status_parser = reqparse.RequestParser()
-req_status_parser.add_argument('taskid', type=int)
+req_status_parser.add_argument('task_id', type=str)
 
 class Generate_Article(Resource):
     def get(self):  # GET 요청시 리턴 값에 해당 하는 dict를 JSON 형태로 반환
@@ -79,22 +81,29 @@ class Generate_Article(Resource):
 
         return new_articles
 
-@celery.task
-def crawler_proc(crawler, engine, keyword, num_of_target):
-    try:
-        article_list = crawler.proc(keyword = keyword, num_of_target = int(num_of_target))
-    except:
-        return False
-    try:
-        if article_list:
-            db_handler.multiple_insert_article(engine_type(engine.upper()), keyword ,article_list)
-    except:
-        return False
-
+CRAWLER_CACHE = None
+@celery.task(bind=True)
+def crawler_proc(self, engine, keyword, num_of_target):
+    with api.app.app_context():
+        print("!@#!@# start crawler_proc")
+        print(CRAWLER_CACHE)
+        try:
+            article_list = CRAWLER_CACHE.proc(keyword = keyword, num_of_target = int(num_of_target))
+        except Exception as e:
+            return {"status":False,
+                    "message":"Exception : "+ repr(e)}
+        try:
+            print("!#@!@# article_list : ", article_list)
+            if article_list:
+                db_handler.multiple_insert_article(engine_type(engine.upper()), keyword ,article_list)
+        except Exception as e:
+            return {"status":False,
+                    "message":"Exception : "+ repr(e)}
+        return {"status":True}
 class Renew(Resource):
-    # TODO : async 처리 필요 
+
     def get(self):
-        # try:
+        # try:FFFF
         args = req_parser.parse_args()
 
         engine = args['engine']
@@ -104,15 +113,19 @@ class Renew(Resource):
 
         if args['mode'] and args['mode'] == 'clear':
             db_handler.delete_article(keyword = keyword)
-    
-        crawler = get_crawler(engine)
 
+        global CRAWLER_CACHE
+        CRAWLER_CACHE = get_crawler(engine)
         if not keyword or not num_of_target:
-            return {"error":"wrong input"}
+            return make_response(jsonify({"error":"wrong input"}), 400)
 
-        task = crawler_proc(crawler, engine, keyword, num_of_target)
-        task_cache[task.id] = task
-        return task.id
+        print("!@#!@# start task")
+        task = crawler_proc.apply_async(engine, keyword, num_of_target)
+        print("!@#!@# pass task")
+        TASK_CACHE[task.id] = task
+        return make_response(jsonify({
+            'task_id': task.id
+        }),200)
 
 
 class Renew_status(Resource):
@@ -120,11 +133,12 @@ class Renew_status(Resource):
     article renew 가 async로 작동하기 때문에 다음 작업을 위한 작업상태확인이 필요
     '''
     def get(self):
-        task_id = req_status_parser.args.get('task_id')
-        task = task_cache[task_id]
-        return jsonify({
+        args = req_status_parser.parse_args()
+        task_id = args['task_id']
+        task = crawler_proc.AsyncResult(task_id)
+        return make_response(jsonify({
             'status': task.ready()
-        })
+        }),200)
 
 class Count_article(Resource):
     def get(self):
@@ -136,11 +150,11 @@ class Count_article(Resource):
             if engine == engine_type.NAVER:
                 count = db_handler.count_naver_article(engine)
             else:
-                return {"error":"wrong input"}
+                return make_response(jsonify({"error":"wrong input"}),400)
 
-            return {'count': count}
+            return make_response(jsonify({'count': count}), 200)
         except Exception as e:
-            return {'error':str(e)}
+            return make_response(jsonify({'error':repr(e)}), 500)
         
         
 
