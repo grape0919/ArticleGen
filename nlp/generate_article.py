@@ -1,6 +1,10 @@
+import sys, os
+sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.getcwd()))
 
 from typing import List
-from nlp.posText import POSifiedText
+from posText import POSifiedText
 from crawler.data.article_info import Article
 from crawler.NaverCrawler import NaverCrawler
 

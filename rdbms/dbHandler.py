@@ -12,6 +12,7 @@ class DBHandler():
     _database = None
 
     def __init__(self):
+        print(conf)
         self._database = pymysql.connect(
             user=conf.DB_USER,
             passwd=conf.DB_PASSWORD,

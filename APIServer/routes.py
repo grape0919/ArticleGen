@@ -83,7 +83,7 @@ class Generate_Article(Resource):
 
 CRAWLER_CACHE = None
 @celery.task(bind=True)
-def crawler_proc(self, engine, keyword, num_of_target):
+def crawler_proc(engine, keyword, num_of_target):
     with api.app.app_context():
         print("!@#!@# start crawler_proc")
         print(CRAWLER_CACHE)
